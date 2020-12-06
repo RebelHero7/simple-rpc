@@ -6,6 +6,7 @@ import com.esotericsoftware.kryo.io.Output;
 import github.rebelhero.entity.RpcRequest;
 import github.rebelhero.entity.RpcResponse;
 import github.rebelhero.exception.SerializeException;
+import github.rebelhero.extension.KoService;
 import github.rebelhero.serializer.Serializer;
 
 import javax.sql.rowset.serial.SerialException;
@@ -16,6 +17,7 @@ import java.io.ByteArrayOutputStream;
  * @author rebelhero
  * @date 2020/11/24
  */
+@KoService(name = "kryo")
 public class KryoSerializer implements Serializer {
 
     /**

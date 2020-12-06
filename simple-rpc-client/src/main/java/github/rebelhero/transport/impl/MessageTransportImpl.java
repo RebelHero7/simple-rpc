@@ -5,6 +5,7 @@ import github.rebelhero.client.NettyClient;
 import github.rebelhero.discovery.ZkServiceDiscovery;
 import github.rebelhero.entity.RpcRequest;
 import github.rebelhero.entity.RpcResponse;
+import github.rebelhero.loadbalance.LoadBalance;
 import github.rebelhero.serializer.Serializer;
 import github.rebelhero.transport.MessageTransport;
 import io.netty.channel.Channel;
@@ -50,17 +51,18 @@ public class MessageTransportImpl implements MessageTransport {
     /**
      * 发送请求。
      *
-     * @param rpcRequest 数据请求
+     * @param rpcRequest  数据请求
+     * @param loadBalance 负载均衡。
      * @return CompletableFuture<RpcResponse>
      * @date 2020/11/30
      */
     @Override
-    public CompletableFuture<RpcResponse> sendMessage(RpcRequest rpcRequest) {
+    public CompletableFuture<RpcResponse> sendMessage(RpcRequest rpcRequest, LoadBalance loadBalance) {
         CompletableFuture<RpcResponse> completableFuture = new CompletableFuture<>();
         String rpcServiceName = rpcRequest.getInterfaceName();
         ZkServiceDiscovery zkServiceDiscovery = new ZkServiceDiscovery();
         // 得到提供服务的地址。
-        InetSocketAddress inetSocketAddress = zkServiceDiscovery.lookupService(rpcServiceName);
+        InetSocketAddress inetSocketAddress = zkServiceDiscovery.lookupService(rpcServiceName, loadBalance);
         // 获得该地址的channel。
         Channel channel = getChannel(inetSocketAddress);
         if (channel.isActive()) {

@@ -5,6 +5,7 @@ import github.rebelhero.entity.RpcResponse;
 import github.rebelhero.enums.RpcErrorEnum;
 import github.rebelhero.enums.RpcResponseEnum;
 import github.rebelhero.exception.RpcException;
+import github.rebelhero.loadbalance.LoadBalance;
 import github.rebelhero.serializer.Serializer;
 import github.rebelhero.transport.MessageTransport;
 import github.rebelhero.transport.impl.MessageTransportImpl;
@@ -24,9 +25,11 @@ import java.util.concurrent.CompletableFuture;
 public class ClientProxy implements InvocationHandler {
 
     private MessageTransport messageTransport;
+    private LoadBalance loadBalance;
 
-    public ClientProxy(Serializer serializer) {
+    public ClientProxy(Serializer serializer, LoadBalance loadBalance) {
         messageTransport = new MessageTransportImpl(serializer);
+        this.loadBalance = loadBalance;
     }
 
     public <T> T getProxy(Class<T> clazz) {
@@ -42,7 +45,8 @@ public class ClientProxy implements InvocationHandler {
                 .parameterTypes(method.getParameterTypes())
                 .requestId(UUID.randomUUID().toString())
                 .build();
-        CompletableFuture<RpcResponse> completableFuture = messageTransport.sendMessage(rpcRequest);
+        CompletableFuture<RpcResponse> completableFuture =
+                messageTransport.sendMessage(rpcRequest,loadBalance);
         RpcResponse rpcResponse = completableFuture.get();
         if (rpcResponse == null ||
                 rpcResponse.getCode() == null ||

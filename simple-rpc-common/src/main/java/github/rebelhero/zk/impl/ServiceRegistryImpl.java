@@ -20,6 +20,6 @@ public class ServiceRegistryImpl implements ServiceRegistry {
      */
     @Override
     public void registerService(String rpcServiceName, InetSocketAddress socketAddress) {
-        ZkCuratorUtils.createPersistentNode( rpcServiceName, socketAddress);
+        ZkCuratorUtils.createPersistentNode(rpcServiceName, socketAddress);
     }
 }

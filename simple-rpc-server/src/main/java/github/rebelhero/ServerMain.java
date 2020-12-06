@@ -1,9 +1,7 @@
 package github.rebelhero;
 
 import github.rebelhero.api.SimpleService;
-import github.rebelhero.serializer.Serializer;
 import github.rebelhero.serializer.kryo.KryoSerializer;
-import github.rebelhero.serializer.protostuff.ProtostuffSerializer;
 import github.rebelhero.server.SimpleRpcServer;
 import github.rebelhero.service.impl.SimpleServiceImpl;
 

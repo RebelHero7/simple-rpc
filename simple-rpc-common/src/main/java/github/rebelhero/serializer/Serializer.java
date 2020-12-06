@@ -1,9 +1,12 @@
 package github.rebelhero.serializer;
 
+import github.rebelhero.extension.KO;
+
 /**
  * @author rebelhero7
  * @date 2020/11/24
  */
+@KO
 public interface Serializer {
 
     /**
